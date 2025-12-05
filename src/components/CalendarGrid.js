@@ -81,7 +81,7 @@ const CalendarGrid = ({ year, month, attendanceData, onDayPress }) => {
 };
 
 const { width } = Dimensions.get('window');
-const CELL_SIZE = (width - 40) / 7; // 40 for padding
+const CELL_SIZE = (width - 60) / 7; // 60 for padding (32 parent + 20 self + safety)
 
 const styles = StyleSheet.create({
     container: {

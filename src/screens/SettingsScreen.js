@@ -68,7 +68,7 @@ const SettingsScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             <ScrollView contentContainerStyle={styles.content}>
                 <Text style={styles.headerTitle}>Settings</Text>
 

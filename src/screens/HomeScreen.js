@@ -7,6 +7,7 @@ import SummaryCard from '../components/SummaryCard';
 import { getMonthName, formatDate } from '../utils/dateUtils';
 import { generateMonthlyReport } from '../utils/reportUtils';
 import { captureRef } from 'react-native-view-shot';
+import { Ionicons } from '@expo/vector-icons';
 
 const HomeScreen = () => {
     const { settings, attendance, updateAttendance } = useMess();
@@ -83,7 +84,7 @@ const HomeScreen = () => {
     if (!settings) return null; // Should not happen if App.js handles routing
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             <ScrollView contentContainerStyle={styles.content}>
                 <View style={styles.header}>
                     <Text style={styles.messName}>{settings.messName}</Text>
@@ -93,11 +94,11 @@ const HomeScreen = () => {
                 {/* Month Navigation */}
                 <View style={styles.monthNav}>
                     <TouchableOpacity onPress={handlePrevMonth} style={styles.navButton}>
-                        <Text style={styles.navButtonText}>{'<'}</Text>
+                        <Ionicons name="chevron-back" size={24} color="#007AFF" />
                     </TouchableOpacity>
                     <Text style={styles.monthTitle}>{getMonthName(month)} {year}</Text>
                     <TouchableOpacity onPress={handleNextMonth} style={styles.navButton}>
-                        <Text style={styles.navButtonText}>{'>'}</Text>
+                        <Ionicons name="chevron-forward" size={24} color="#007AFF" />
                     </TouchableOpacity>
                 </View>
 

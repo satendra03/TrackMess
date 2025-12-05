@@ -30,7 +30,7 @@ const SetupScreen = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             <View style={styles.content}>
                 <Text style={styles.title}>Welcome to TrackMess</Text>
                 <Text style={styles.subtitle}>Please enter your mess details to get started.</Text>
