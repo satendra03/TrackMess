@@ -11,18 +11,7 @@ import {
   loadAttendance,
   saveAttendance,
 } from "../storage/storage";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
 import { formatDate } from "../utils/dateUtils";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowBanner: true,
-    shouldShowList: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
 
 const MessContext = createContext();
 
@@ -32,22 +21,9 @@ export const MessProvider = ({ children }) => {
   const [settings, setSettings] = useState(null); // { messName, dailyFullCost }
   const [attendance, setAttendance] = useState({}); // { "YYYY-MM-DD": { status } }
   const [loading, setLoading] = useState(true);
-  const notificationListener = useRef();
-  const responseListener = useRef();
 
   useEffect(() => {
-    requestNotificationPermissions();
-    scheduleDailyNotification();
     loadData();
-
-    return () => {
-      if (notificationListener.current)
-        Notifications.removeNotificationSubscription(
-          notificationListener.current,
-        );
-      if (responseListener.current)
-        Notifications.removeNotificationSubscription(responseListener.current);
-    };
   }, []);
 
   const loadData = async () => {
@@ -120,46 +96,6 @@ export const MessProvider = ({ children }) => {
       await saveAttendance(newAttendance);
     }
     return newAttendance;
-  };
-
-  const scheduleDailyNotification = async () => {
-    try {
-      // Cancel all existing to avoid duplicates
-      await Notifications.cancelAllScheduledNotificationsAsync();
-
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "Mess Attendance",
-          body: "Have you marked your attendance today? If not, it will be marked as Full.",
-        },
-        trigger: {
-          hour: 21,
-          minute: 0,
-          repeats: true,
-        },
-      });
-      console.log("Daily notification scheduled for 9 PM");
-    } catch (e) {
-      console.error("Error scheduling notification:", e);
-    }
-  };
-
-  const requestNotificationPermissions = async () => {
-    if (Device.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        console.log("Failed to get notification permissions!");
-        return;
-      }
-    } else {
-      console.log("Must use physical device for Notifications");
-    }
   };
 
   const updateSettings = async (newSettings) => {
